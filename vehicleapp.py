@@ -10,18 +10,36 @@ import joblib
 import os
 import gdown
 
+st .set_page_config(page_title="Vehicle price predictor")
+
+try:
+
 # Download new_model.pkl
-if not os.path.exists("new_model.pkl"):
-    gdown.download("https://drive.google.com/uc?id=1Vgan6YToyiNhYd2fLzEOa-Tt2mF6-TA4", "new_model.pkl", quiet=False)
+    if not os.path.exists("new_model.pkl"):
+        gdown.download("https://drive.google.com/uc?id=1Vgan6YToyiNhYd2fLzEOa-Tt2mF6-TA4", "new_model.pkl", quiet=False)
 
 # Download used_model.pkl
-if not os.path.exists("used_model.pkl"):
-    gdown.download("https://drive.google.com/uc?id=1KZC3O-vnMfhzj6Rx_sUYEet8S0_uYybL", "used_model.pkl", quiet=False)
+    if not os.path.exists("used_model.pkl"):
+        gdown.download("https://drive.google.com/uc?id=1KZC3O-vnMfhzj6Rx_sUYEet8S0_uYybL", "used_model.pkl", quiet=False)
 
 # Download make_model_to_styles.pkl
-if not os.path.exists("make_model_to_styles.pkl"):
-    gdown.download("https://drive.google.com/uc?id=17HDzSlZiP8Qlwgb18ETpuuhUIO4xNTzK", "make_model_to_styles.pkl", quiet=False)
+    if not os.path.exists("make_model_to_styles.pkl"):
+        gdown.download("https://drive.google.com/uc?id=17HDzSlZiP8Qlwgb18ETpuuhUIO4xNTzK", "make_model_to_styles.pkl", quiet=False)
 
+except Exception as e:
+    st.error(f"Error downloading model files: {e}")
+
+
+# Try to load everything with full error visibility
+try:
+    new_model = joblib.load("new_model.pkl")
+    used_model = joblib.load("used_model.pkl")
+    with open("make_model_to_styles.pkl", "rb") as f:
+        make_model_to_styles = pickle.load(f)
+    st.success("✅ Models loaded successfully.")
+except Exception as e:
+    st.error(f"❌ Error loading model files: {e}")
+    raise e
 
 # Load both models and style mapping using joblib
 new_model = joblib.load("new_model.pkl")

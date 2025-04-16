@@ -2,6 +2,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import pickle
 
 
 # Load  both models
@@ -25,7 +26,11 @@ if not os.path.exists("make_model_to_styles.pkl"):
 # Load both models and style mapping using joblib
 new_model = joblib.load("new_model.pkl")
 used_model = joblib.load("used_model.pkl")
-make_model_to_styles = joblib.load("make_model_to_styles.pkl")
+# make_model_to_styles = joblib.load("make_model_to_styles.pkl")
+
+# Load style mapping using pickle (not joblib!)
+with open("make_model_to_styles.pkl", "rb") as f:
+    make_model_to_styles = pickle.load(f)
 
 # --- Model choice ---
 car_type = st.radio("Select Vehicle Type", ["Used", "New"])
